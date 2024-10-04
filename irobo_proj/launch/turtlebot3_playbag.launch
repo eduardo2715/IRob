@@ -13,15 +13,15 @@
   <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)" />
 
   <!-- TF -->
-  
+
   <!-- ROSBAG -->
   <param name="/use_sim_time" value="true"/>
   <node pkg="rosbag" type="play" name="rosbag_player" 
-          args="--clock $(find turtlebot3_datasets)/data/$(arg bag_name).bag"/>
+        args="--clock $(find turtlebot3_datasets)/data/$(arg bag_name).bag"/>
 
   <!-- EKF robot localisation -->
 
-  <!-- AMCL-->
+  <!-- AMCL -->
 
   <!-- Groundtruth path -->
 
@@ -29,13 +29,18 @@
 
   <!-- Position error publisher -->
 
-  <!-- rviz -->
+  <!-- RViz -->
   <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find turtlebot3_datasets)/rviz/dataset.rviz"/>
-  <node pkg="tf2_ros" type="static_transform_publisher" name="static_transform_publisher" args="0 0 0 0 0 0 1 map odom" />
-  <node pkg="tf2_ros" type="static_transform_publisher" name="tf2_base_scan2base_link" required="true"
-       args="0.935 1.34 -0.023 0.001 -0.003 0.737 0.676 mocap map"/>
-       
-  <!-- Odom to Path Node (Publishing the path from /odom) -->
-  <!-- <node pkg="turtlebot3_datasets" type="odom_to_path_dataset.py" name="odom_to_path_dataset" output="screen"/> -->
 
+  <!-- Static transforms -->
+  <node pkg="tf2_ros" type="static_transform_publisher" name="static_transform_publisher_map_odom" 
+        args="0 0 0 0 0 0 1 map odom" />
+  
+  <node pkg="tf2_ros" type="static_transform_publisher" name="static_transform_publisher_mocap_map" 
+        required="true" args="0.935 1.34 -0.023 0.001 -0.003 0.737 0.676 mocap map" />
+       
+  <!-- Ground truth path -->
+  <node pkg="turtlebot3_datasets" type="ground_truth_path.py" name="ground_truth_path" output="screen"/>
+  
 </launch>
+
