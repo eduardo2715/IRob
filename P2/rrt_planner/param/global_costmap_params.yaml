@@ -1,0 +1,29 @@
+global_costmap:
+  global_frame: map
+  robot_base_frame: base_footprint
+
+  update_frequency: 10.0
+  publish_frequency: 10.0
+  transform_tolerance: 0.5
+
+  static_map: true
+
+  # Add plugins to load layers
+  plugins:
+    - {name: static_layer, type: "costmap_2d::StaticLayer"}
+    - {name: inflation_layer, type: "costmap_2d::InflationLayer"}
+    - {name: obstacle_layer, type: "costmap_2d::ObstacleLayer"}
+
+  # Inflation layer parameters
+  inflation_layer:
+    inflation_radius: 3  # Distance around obstacles
+    cost_scaling_factor: 10.0  # Steeper cost gradient near obstacles
+
+  # Obstacle layer settings (optional)
+obstacle_layer:
+  max_obstacle_height: 2.0
+  obstacle_range: 4.0  # Increase the distance at which obstacles are detected
+  raytrace_range: 4.5  # Increase how far ahead obstacles are raytraced
+  combination_method: 1
+
+

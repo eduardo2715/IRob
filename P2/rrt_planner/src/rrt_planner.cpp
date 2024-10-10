@@ -92,17 +92,19 @@ namespace rrt_planner {
 	}
 
 
+	    
     double* RRTPlanner::sampleRandomPoint() {
-    
-    	    /**************************
+        /**************************
 	    * Implement your code here
 	    **************************/
-	    
-    rand_point_[0] = random_double_x.generate(); // Random x-coordinate
-    rand_point_[1] = random_double_y.generate(); // Random y-coordinate
+    do {
+        rand_point_[0] = random_double_x.generate(); // Random x-coordinate
+        rand_point_[1] = random_double_y.generate(); // Random y-coordinate
+    } while (!collision_dect_.inFreeSpace(rand_point_));  // Keep sampling until a free point is found
 
-    return rand_point_;  // Now, it will return a properly initialized array.
+    return rand_point_;
     }
+
 
 
     double* RRTPlanner::extendTree(const double* point_nearest, const double* point_rand) {

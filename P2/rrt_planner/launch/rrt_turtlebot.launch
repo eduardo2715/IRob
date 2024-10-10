@@ -16,8 +16,8 @@
 
   <!-- AMCL -->
   <include file="$(find turtlebot3_navigation)/launch/amcl.launch">
-    <arg name="initial_pose_x" default="0.0"/>
-    <arg name="initial_pose_y" default="0.0"/>
+    <arg name="initial_pose_x" default="-2.0"/>
+    <arg name="initial_pose_y" default="-0.5"/>
     <arg name="initial_pose_a" default="0.0"/>
   </include>
 
@@ -29,8 +29,8 @@
 
     <rosparam file="$(find turtlebot3_navigation)/param/costmap_common_params_$(arg model).yaml" command="load" ns="global_costmap" />
     <rosparam file="$(find turtlebot3_navigation)/param/costmap_common_params_$(arg model).yaml" command="load" ns="local_costmap" />
-    <rosparam file="$(find turtlebot3_navigation)/param/local_costmap_params.yaml" command="load" />
-    <rosparam file="$(find turtlebot3_navigation)/param/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find rrt_planner)/param/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find rrt_planner)/param/global_costmap_params.yaml" command="load" />
     <rosparam file="$(find rrt_planner)/param/move_base_params.yaml" command="load" />
     <rosparam file="$(find turtlebot3_navigation)/param/dwa_local_planner_params_$(arg model).yaml" command="load" />
 

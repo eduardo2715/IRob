@@ -13,30 +13,69 @@ namespace rrt_planner {
 
     }
 
-    bool CollisionDetector::inFreeSpace(const double* world_pos) {
-	    /**************************
-	    * Implement your code here
-	    **************************/
+    /* bool CollisionDetector::inFreeSpace(const double* world_pos, double safety_radius) {
 
-	    // Convert world coordinates to map coordinates
-	    unsigned int mx, my;
-	    if (!costmap_->worldToMap(world_pos[0], world_pos[1], mx, my)) {
-		// The position is outside the costmap boundaries
-		return false;
-	    }
+        // Convert world coordinates to map coordinates
+        unsigned int mx, my;
+        if (!costmap_->worldToMap(world_pos[0], world_pos[1], mx, my)) {
+            // The position is outside the costmap boundaries
+            return false;
+        }
 
-	    // Get the cost at the map coordinates
-	    unsigned char cost = costmap_->getCost(mx, my);
+        // Define a threshold for what is considered "free space"
+        unsigned char cost = costmap_->getCost(mx, my);
 
-	    // Define a threshold for what is considered "free space"
-	    // Costmap values range from 0 (free space) to 255 (fully occupied/obstacle)
-	    // A common threshold is 254, where values >= 254 are considered lethal obstacles
-	    if (cost >= costmap_2d::LETHAL_OBSTACLE) {
-		return false;  // It's not free space (there's an obstacle)
-	    }
+        // Check if the current cell is an obstacle or lethal zone
+        if (cost >= costmap_2d::LETHAL_OBSTACLE) {
+            return false;
+        }
 
-	    return true;  // It's free space
-	}
+        // If a safety radius is defined, check the neighboring cells within that radius
+        unsigned int cell_radius = static_cast<unsigned int>(std::ceil(safety_radius / resolution_));
+        for (int dx = -cell_radius; dx <= cell_radius; ++dx) {
+            for (int dy = -cell_radius; dy <= cell_radius; ++dy) {
+                unsigned int neighbor_mx = mx + dx;
+                unsigned int neighbor_my = my + dy;
+
+                // Ensure that the neighbor coordinates are within the map bounds
+                if (neighbor_mx < costmap_->getSizeInCellsX() && neighbor_my < costmap_->getSizeInCellsY()) {
+                    unsigned char neighbor_cost = costmap_->getCost(neighbor_mx, neighbor_my);
+
+                    // If any cell within the radius is an obstacle, return false
+                    if (neighbor_cost >= costmap_2d::LETHAL_OBSTACLE) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        // If no obstacles are found within the radius, it's considered free space
+        return true;
+    } */
+
+
+   bool CollisionDetector::inFreeSpace(const double* world_pos) {
+    // Convert world coordinates to map coordinates
+    unsigned int mx, my;
+    if (!costmap_->worldToMap(world_pos[0], world_pos[1], mx, my)) {
+        return false;  // The position is outside the costmap boundaries
+    }
+
+    // Get the cost at the map coordinates
+    unsigned char cost = costmap_->getCost(mx, my);
+
+    // Add a buffer to account for safe distance from obstacles
+    unsigned char buffer_threshold = costmap_2d::INSCRIBED_INFLATED_OBSTACLE;  // Inscribed radius
+    
+    // If cost is within dangerous levels or near obstacle buffer
+    if (cost >= buffer_threshold) {
+        return false;  // It's not free space (too close to obstacles)
+    }
+
+    return true;  // It's free space
+}
+
+
 
 
     bool CollisionDetector::obstacleBetween(const double* point_a, const double* point_b) {
