@@ -13,36 +13,27 @@ namespace rrt_planner {
 
     }
 
-
-/*     bool CollisionDetector::inFreeSpace(const double* world_pos) {
-
-
-        // Convert world coordinates to map coordinates
-        unsigned int mx, my;
-        if (!costmap_->worldToMap(world_pos[0], world_pos[1], mx, my)) {
-            return false;  // The position is outside the costmap boundaries
-        } 
-
-        return true;  // It's free space
-    } */
-
     bool CollisionDetector::inFreeSpace(const double* world_pos) {
-        // Convert world coordinates to map coordinates
-        unsigned int mx, my;
-        if (!costmap_->worldToMap(world_pos[0], world_pos[1], mx, my)) {
-            return false;  // The position is outside the costmap boundaries
-        }
 
-        // Check the cost at the map coordinates
-        unsigned char cost = costmap_->getCost(mx, my);
+	    // Convert world coordinates to map coordinates
+	    unsigned int mx, my;
+	    if (!costmap_->worldToMap(world_pos[0], world_pos[1], mx, my)) {
+		// The position is outside the costmap boundaries
+		return false;
+	    }
 
-        // If the cost is unknown or an obstacle, it's not free space
-        if (cost > 254) {
-            return false;
-        } else {
-            return true;  // Free space
-        }
-    }
+	    // Get the cost at the map coordinates
+	    unsigned char cost = costmap_->getCost(mx, my);
+
+	    // Define a threshold for what is considered "free space"
+	    // Costmap values range from 0 (free space) to 255 (fully occupied/obstacle)
+	    // A common threshold is 254, where values >= 254 are considered lethal obstacles
+	    if (cost >= costmap_2d::LETHAL_OBSTACLE) {
+		return false;  // It's not free space (there's an obstacle)
+	    }
+
+	    return true;  // It's free space
+	}
 
 
     bool CollisionDetector::obstacleBetween(const double* point_a, const double* point_b) {
