@@ -22,7 +22,7 @@ namespace rrt_planner {
         nodes_.clear();
 
         // Start Node
-        createNewNode(start_, -1);
+        createNewNode(start_, -1); 
 
         double *p_rand, *p_new;
         Node nearest_node;
@@ -53,7 +53,7 @@ namespace rrt_planner {
 
     
     int RRTPlanner::getNearestNodeId(const double* point) {
-    	    /**************************
+    	/**************************
 	    * Implement your code here
 	    **************************/
 	int nearest_id = -1;  // Initialize with an invalid index or node ID.
@@ -97,28 +97,35 @@ namespace rrt_planner {
         /**************************
 	    * Implement your code here
 	    **************************/
-    do {
-        rand_point_[0] = random_double_x.generate(); // Random x-coordinate
-        rand_point_[1] = random_double_y.generate(); // Random y-coordinate
-    } while (!collision_dect_.inFreeSpace(rand_point_));  // Keep sampling until a free point is found
+        // Loop until a valid free space point is found that is far enough from obstacles
+        do {
+            rand_point_[0] = random_double_x.generate(); // Random x-coordinate
+            rand_point_[1] = random_double_y.generate(); // Random y-coordinate
+        } while (!collision_dect_.inFreeSpace(rand_point_));  // Check for safe distance
 
-    return rand_point_;
+        return rand_point_;
     }
 
 
 
     double* RRTPlanner::extendTree(const double* point_nearest, const double* point_rand) {
     
-    	    /**************************
+    	/**************************
 	    * Implement your code here
 	    **************************/
 	    
-	 double theta = atan2(point_rand[1] - point_nearest[1], point_rand[0] - point_nearest[0]); // Angle to the random point
-      candidate_point_[0] = point_nearest[0] + params_.step * cos(theta); // Step towards the random point in x
-      candidate_point_[1] = point_nearest[1] + params_.step * sin(theta); // Step towards the random point in y
+        double theta = atan2(point_rand[1] - point_nearest[1], point_rand[0] - point_nearest[0]);
+        // Step towards the random point
+        candidate_point_[0] = point_nearest[0] + params_.step * cos(theta);
+        candidate_point_[1] = point_nearest[1] + params_.step * sin(theta);
 
-	    return candidate_point_;  // Ensure the return statement is present.
-	}
+        // Check if the new point is in free space and at a safe distance from obstacles
+        if (!collision_dect_.inFreeSpace(candidate_point_)) {
+            return nullptr;  // Return null if the point is too close to obstacles or in unsafe space
+        }
+
+        return candidate_point_;  // Return the new candidate point if valid
+    }
 
     const std::vector<Node>& RRTPlanner::getTree() {
 

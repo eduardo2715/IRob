@@ -1,3 +1,38 @@
+# #local_costmap_params.yaml
+
+# local_costmap:
+#   global_frame: odom
+#   robot_base_frame: base_footprint
+
+#   update_frequency: 5
+#   publish_frequency: 5
+#   transform_tolerance: 0.5  
+
+#   static_map: false  
+#   rolling_window: true
+#   width: 3
+#   height: 3
+#   resolution: 0.05
+
+#   # Add plugins to load layers
+#   plugins:
+#     - {name: static_layer, type: "costmap_2d::StaticLayer"}
+#     - {name: inflation_layer, type: "costmap_2d::InflationLayer"}
+#     - {name: obstacle_layer, type: "costmap_2d::ObstacleLayer"}
+
+#   # Inflation layer parameters
+#   inflation_layer:
+#     inflation_radius: 1.5 # Increase distance around obstacles
+#     cost_scaling_factor: 10.0  # Steeper cost gradient near obstacles
+
+#   # Obstacle layer settings (optional, but good for fine-tuning)
+# obstacle_layer:
+#   max_obstacle_height: 2.0
+#   obstacle_range: 4.0  # Increase the distance at which obstacles are detected
+#   raytrace_range: 4.5  # Increase how far ahead obstacles are raytraced
+#   combination_method: 1
+
+
 local_costmap:
   global_frame: odom
   robot_base_frame: base_footprint
@@ -11,23 +46,4 @@ local_costmap:
   width: 3
   height: 3
   resolution: 0.05
-
-  # Add plugins to load layers
-  plugins:
-    - {name: static_layer, type: "costmap_2d::StaticLayer"}
-    - {name: inflation_layer, type: "costmap_2d::InflationLayer"}
-    - {name: obstacle_layer, type: "costmap_2d::ObstacleLayer"}
-
-  # Inflation layer parameters
-  inflation_layer:
-    inflation_radius: 3  # Increase distance around obstacles
-    cost_scaling_factor: 10.0  # Steeper cost gradient near obstacles
-
-  # Obstacle layer settings (optional, but good for fine-tuning)
-obstacle_layer:
-  max_obstacle_height: 2.0
-  obstacle_range: 4.0  # Increase the distance at which obstacles are detected
-  raytrace_range: 4.5  # Increase how far ahead obstacles are raytraced
-  combination_method: 1
-
-
+  
