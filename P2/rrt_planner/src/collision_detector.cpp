@@ -14,11 +14,8 @@ namespace rrt_planner {
     }
 
 
-    bool CollisionDetector::inFreeSpace(const double* world_pos) {
+/*     bool CollisionDetector::inFreeSpace(const double* world_pos) {
 
-        /**************************
-	    * Implement your code here
-	    **************************/
 
         // Convert world coordinates to map coordinates
         unsigned int mx, my;
@@ -27,7 +24,26 @@ namespace rrt_planner {
         } 
 
         return true;  // It's free space
+    } */
+
+    bool CollisionDetector::inFreeSpace(const double* world_pos) {
+        // Convert world coordinates to map coordinates
+        unsigned int mx, my;
+        if (!costmap_->worldToMap(world_pos[0], world_pos[1], mx, my)) {
+            return false;  // The position is outside the costmap boundaries
+        }
+
+        // Check the cost at the map coordinates
+        unsigned char cost = costmap_->getCost(mx, my);
+
+        // If the cost is unknown or an obstacle, it's not free space
+        if (cost > 254) {
+            return false;
+        } else {
+            return true;  // Free space
+        }
     }
+
 
     bool CollisionDetector::obstacleBetween(const double* point_a, const double* point_b) {
 
