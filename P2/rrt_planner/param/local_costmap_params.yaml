@@ -46,4 +46,8 @@ local_costmap:
   width: 3
   height: 3
   resolution: 0.05
+
+  inflation_radius: 2.0  # Adjust this for the local costmap's obstacle inflation
+  cost_scaling_factor: 5.0  # Adjust this for cost scaling around obstacles
+
   

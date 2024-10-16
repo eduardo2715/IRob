@@ -38,6 +38,10 @@ global_costmap:
   transform_tolerance: 0.5
 
   static_map: true
+
+  inflation_radius: 2.0
+  cost_scaling_factor: 5.0  # Adjust this for cost scaling around obstacles
+
  
 
 

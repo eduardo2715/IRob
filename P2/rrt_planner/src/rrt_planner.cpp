@@ -32,6 +32,13 @@ namespace rrt_planner {
             p_rand = sampleRandomPoint();
             nearest_node = nodes_[getNearestNodeId(p_rand)];
             p_new = extendTree(nearest_node.pos, p_rand); // new point and node candidate
+            ROS_INFO("#################################################################################################################################");
+            if (p_new == nullptr) {
+                continue;
+            }
+            ROS_INFO("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
+
+            ROS_INFO("continue after extend tree");
 
             if (!collision_dect_.obstacleBetween(nearest_node.pos, p_new)) {
                 createNewNode(p_new, nearest_node.node_id);
@@ -56,19 +63,24 @@ namespace rrt_planner {
     	/**************************
 	    * Implement your code here
 	    **************************/
-	int nearest_id = -1;  // Initialize with an invalid index or node ID.
-	   double min_dist = std::numeric_limits<double>::max(); // Set a very large value to compare distances.
+        if (nodes_.empty()) {
+            ROS_ERROR("No nodes available in RRT tree.");
+            return -1;  // Return an invalid ID if the tree is empty
+        }
 
-	    for (int i = 0; i < nodes_.size(); ++i) {
-		double dist = computeDistance(nodes_[i].pos, point);
-		if (dist < min_dist) {
-		    min_dist = dist;
-		    nearest_id = i;
-		}
-	    }
+        int nearest_id = -1;
+        double min_dist = std::numeric_limits<double>::max();
 
-	    return nearest_id;  // Ensure a return statement is present.
-	}
+        for (int i = 0; i < nodes_.size(); ++i) {
+            double dist = computeDistance(nodes_[i].pos, point);
+            if (dist < min_dist) {
+                min_dist = dist;
+                nearest_id = i;
+            }
+        }
+
+        return nearest_id;
+    }
 
     void RRTPlanner::createNewNode(const double* pos, int parent_node_id) {
     	    /**************************
@@ -99,9 +111,11 @@ namespace rrt_planner {
 	    **************************/
         // Loop until a valid free space point is found that is far enough from obstacles
         do {
-            rand_point_[0] = random_double_x.generate(); // Random x-coordinate
-            rand_point_[1] = random_double_y.generate(); // Random y-coordinate
-        } while (!collision_dect_.inFreeSpace(rand_point_));  // Check for safe distance
+        rand_point_[0] = random_double_x.generate();
+        rand_point_[1] = random_double_y.generate();
+
+            // Add a buffer distance to keep nodes away from the inflated obstacles
+        } while (!collision_dect_.inFreeSpace(rand_point_));
 
         return rand_point_;
     }
@@ -115,17 +129,21 @@ namespace rrt_planner {
 	    **************************/
 	    
         double theta = atan2(point_rand[1] - point_nearest[1], point_rand[0] - point_nearest[0]);
+
         // Step towards the random point
         candidate_point_[0] = point_nearest[0] + params_.step * cos(theta);
         candidate_point_[1] = point_nearest[1] + params_.step * sin(theta);
 
         // Check if the new point is in free space and at a safe distance from obstacles
         if (!collision_dect_.inFreeSpace(candidate_point_)) {
-            return nullptr;  // Return null if the point is too close to obstacles or in unsafe space
+            //ROS_INFO("extendTree: Point (%.2f, %.2f) is not in free space, rejecting.", candidate_point_[0], candidate_point_[1]);
+            return nullptr;  // If not free space, don't extend the tree
         }
 
+        //ROS_INFO("extendTree: Point (%.2f, %.2f) is valid, extending the tree.", candidate_point_[0], candidate_point_[1]);
         return candidate_point_;  // Return the new candidate point if valid
     }
+
 
     const std::vector<Node>& RRTPlanner::getTree() {
 
