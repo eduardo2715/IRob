@@ -3,7 +3,7 @@ RRTPlannerROS: {
 
   rrt: {
     step: 0.10,
-    min_num_nodes: 100,
+    min_num_nodes: 2,
     max_num_nodes: 1000,
   }
 }
