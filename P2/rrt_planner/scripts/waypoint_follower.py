@@ -10,6 +10,7 @@ from tf.transformations import quaternion_from_euler
 
 class WaypointFollower:
     def __init__(self):
+        # Initialize the node
         rospy.init_node('waypoint_follower')
 
         # Create action client to communicate with move_base
@@ -18,6 +19,9 @@ class WaypointFollower:
 
         # Create a publisher for the markers
         self.marker_pub = rospy.Publisher('/waypoint_markers', Marker, queue_size=10)
+
+        # Ensure the publisher is ready before publishing
+        rospy.sleep(1)  # Wait for the publisher to be fully initialized
 
         # Define the waypoints (x, y, and yaw in radians)
         self.waypoints = [
@@ -34,13 +38,14 @@ class WaypointFollower:
         self.execute_waypoints()
 
     def execute_waypoints(self):
+        # Loop through each waypoint and move the robot to it
         for i, waypoint in enumerate(self.waypoints):
             rospy.loginfo(f"Moving to waypoint {i+1}: {waypoint}")
             if self.move_to_goal(waypoint['x'], waypoint['y'], waypoint['yaw']):
                 rospy.loginfo(f"Reached waypoint {i+1}")
             else:
                 rospy.logerr(f"Failed to reach waypoint {i+1}")
-                break  # Stop if failed to reach the waypoint
+                break  # Stop if the robot fails to reach the waypoint
 
     def move_to_goal(self, x, y, yaw):
         # Create a new goal to send to move_base
@@ -73,9 +78,9 @@ class WaypointFollower:
         quat = quaternion_from_euler(0.0, 0.0, yaw)
         return Pose().orientation.__class__(*quat)
 
-    def publish_marker(self, x, y, index):  #currently not working
+    def publish_marker(self, x, y, index):
         # Publish a marker at the given position (x, y)
-        
+        rospy.loginfo(f"Publishing marker at ({x}, {y}) with ID {index}")
         marker = Marker()
         marker.header.frame_id = "map"
         marker.header.stamp = rospy.Time.now()
@@ -83,17 +88,25 @@ class WaypointFollower:
         marker.id = index
         marker.type = Marker.SPHERE
         marker.action = Marker.ADD
+
+        # Set the pose of the marker
         marker.pose.position.x = x
         marker.pose.position.y = y
         marker.pose.position.z = 0.0
-        marker.pose.orientation.w = 1.0
-        marker.scale.x = 0.2
-        marker.scale.y = 0.2
-        marker.scale.z = 0.2
-        marker.color.r = 1.0
+        marker.pose.orientation.w = 1.0  # No rotation for the sphere
+
+        # Set marker scale (increase size for better visibility)
+        marker.scale.x = 0.1  # Larger size for better visibility
+        marker.scale.y = 0.1
+        marker.scale.z = 0.1
+
+        # Set marker color (R, G, B, Alpha)
+        marker.color.r = 1.0  # Red color
         marker.color.g = 0.0
         marker.color.b = 0.0
-        marker.color.a = 1.0
+        marker.color.a = 1.0  # Fully opaque
+
+        # Set the lifetime of the marker (0 means it will persist)
         marker.lifetime = rospy.Duration(0)
 
         # Publish the marker
