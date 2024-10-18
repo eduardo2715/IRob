@@ -25,7 +25,7 @@ namespace rrt_planner {
         unsigned char cost = costmap_->getCost(mx, my);
 
         // Define a safe cost threshold (you can fine-tune this value)
-        unsigned char safe_threshold = costmap_2d::INSCRIBED_INFLATED_OBSTACLE - 40;  // Example threshold
+        unsigned char safe_threshold = costmap_2d::INSCRIBED_INFLATED_OBSTACLE - 120;
 
         // Check for obstacles, inscribed obstacles, and unknown areas
         if (cost == costmap_2d::NO_INFORMATION || cost == costmap_2d::LETHAL_OBSTACLE || cost >= safe_threshold) {

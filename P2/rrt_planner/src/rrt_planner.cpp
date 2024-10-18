@@ -22,7 +22,7 @@ namespace rrt_planner {
         nodes_.clear();
 
         // Start Node
-        createNewNode(start_, -1); 
+        createNewNode(start_, -1);
 
         double *p_rand, *p_new;
         Node nearest_node;
@@ -78,7 +78,7 @@ namespace rrt_planner {
     }
 
     void RRTPlanner::createNewNode(const double* pos, int parent_node_id) {
-    	    /**************************
+    	/**************************
 	    * Implement your code here
 	    **************************/
 
@@ -95,7 +95,8 @@ namespace rrt_planner {
 	    new_node.node_id = nodes_.size();
 
 	    // Add the new node to the tree
-	    nodes_.emplace_back(new_node);
+        nodes_.emplace_back(new_node);
+        
 	}
 
 

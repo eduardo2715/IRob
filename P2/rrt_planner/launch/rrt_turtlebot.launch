@@ -44,8 +44,8 @@
   <!-- amcl path (additional Python node) -->
   <node pkg="rrt_planner" type="amcl_path.py" name="amcl_path" output="screen"/> 
 
-  <!-- Waypoint follower node (add the waypoint-following script) 
-  <node pkg="rrt_planner" type="waypoint_follower.py" name="waypoint_follower" output="screen"/> -->
+  <!-- Waypoint follower node (add the waypoint-following script) -->
+  <node pkg="rrt_planner" type="waypoint_follower_simulation.py" name="waypoint_follower_simulation" output="screen"/> 
 
   <!-- rviz -->
   <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find rrt_planner)/rviz/rrt_tb_2.rviz"/>

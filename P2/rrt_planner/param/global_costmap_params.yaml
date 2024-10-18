@@ -14,7 +14,7 @@
      - {name: obstacle_layer, type: "costmap_2d::ObstacleLayer"}
    # Inflation layer parameters
    inflation_layer:
-     inflation_radius: 1.5  # Distance around obstacles
+     inflation_radius: 3 # Distance around obstacles
      cost_scaling_factor: 10.0  # Steeper cost gradient near obstacles
    # Obstacle layer settings (optional)
  obstacle_layer:
