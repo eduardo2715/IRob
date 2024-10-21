@@ -25,12 +25,11 @@ class WaypointFollower:
 
         # Define the waypoints (x, y, and yaw in radians)
         self.waypoints = [
-            {'x': 2, 'y': -0.5, 'yaw': 0.0},
-            {'x': 0.8, 'y': 2.0, 'yaw': 0.0},
-            {'x': 0.6, 'y': -2.0, 'yaw': 3.14},
-            {'x': -2.0, 'y': -0.5, 'yaw': 0.0}
+            {'x': 0.5, 'y': -5.0, 'yaw': 0.0},
+            {'x': 1.5, 'y': -5.5, 'yaw': 0.0},
+            {'x': 3.0, 'y': -4.5, 'yaw': 3.14},
+            {'x': 3.3, 'y': -2.0, 'yaw': 0.0}
         ]
-
         # Publish all markers before starting the navigation
         self.publish_all_markers()
 
