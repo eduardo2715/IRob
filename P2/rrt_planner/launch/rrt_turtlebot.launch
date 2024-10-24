@@ -16,8 +16,8 @@
 
   <!-- AMCL -->
   <include file="$(find turtlebot3_navigation)/launch/amcl.launch">
-    <arg name="initial_pose_x" default="0.0"/>  <!-- -2.0 -->
-    <arg name="initial_pose_y" default="0.0"/> <!-- -0.5 -->
+    <arg name="initial_pose_x" default="-2.0"/>  <!-- -2.0 -->
+    <arg name="initial_pose_y" default="-0.5"/> <!-- -0.5 -->
     <arg name="initial_pose_a" default="0.0"/>
   </include>
 
@@ -44,8 +44,8 @@
   <!-- amcl path (additional Python node) -->
   <node pkg="rrt_planner" type="amcl_path.py" name="amcl_path" output="screen"/> 
 
-  <!-- Waypoint follower node (add the waypoint-following script) -->
-  <node pkg="rrt_planner" type="waypoint_follower.py" name="waypoint_follower" output="screen"/> 
+  <!-- Waypoint follower node (add the waypoint-following script) 
+  <node pkg="rrt_planner" type="waypoint_follower_simulation.py" name="waypoint_follower_simulation" output="screen"/> -->
 
   <!-- rviz -->
   <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find rrt_planner)/rviz/rrt_tb_2.rviz"/>
