@@ -1,3 +1,4 @@
+
 # #dwa_local_planner_params_waffle_pi.yaml
 
  DWAPlannerROS:
@@ -39,3 +40,4 @@
 
    publish_traj_pc : true
    publish_cost_grid_pc: true
+

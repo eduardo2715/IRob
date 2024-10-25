@@ -28,12 +28,17 @@
     
     <rosparam file="$(find rrt_planner)/config/rrt_planner.yaml" command="load"/>
 
+    <!-- <rosparam file="$(find turtlebot3_navigation)/param/costmap_common_params_$(arg model).yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find turtlebot3_navigation)/param/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find rrt_planner)/param/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find rrt_planner)/param/move_base_params.yaml" command="load" /> 
+    <rosparam file="$(find rrt_planner)/param/dwa_local_planner_params_$(arg model).yaml" command="load" /> -->
+
     <rosparam file="$(find rrt_planner)/param/costmap_common_params_$(arg model).yaml" command="load" ns="global_costmap" />
-    <rosparam file="$(find rrt_planner)/param/costmap_common_params_$(arg model).yaml" command="load" ns="local_costmap" />
     <rosparam file="$(find rrt_planner)/param/local_costmap_params.yaml" command="load" />
     <rosparam file="$(find rrt_planner)/param/global_costmap_params.yaml" command="load" />
     <rosparam file="$(find rrt_planner)/param/move_base_params.yaml" command="load" /> 
-    <rosparam file="$(find rrt_planner)/param/dwa_local_planner_params_$(arg model).yaml" command="load" />
+    <rosparam file="$(find rrt_planner)/param/dwa_local_planner_params_$(arg model).yaml" command="load" /> 
 
     <param name="DWAPlannerROS/min_vel_x" value="0.0" if="$(arg move_forward_only)"/>
 
@@ -44,10 +49,12 @@
   <!-- amcl path (additional Python node) -->
   <node pkg="rrt_planner" type="amcl_path.py" name="amcl_path" output="screen"/> 
 
-  <!-- Waypoint follower node (add the waypoint-following script)                                 
-  <node pkg="rrt_planner" type="waypoint_follower_simulation.py" name="waypoint_follower_simulation" output="screen"/> -->
+  <!-- Waypoint follower node (add the waypoint-following script) -->                        
+  <node pkg="rrt_planner" type="waypoint_follower_simulation.py" name="waypoint_follower_simulation" output="screen"/> 
 
   <!-- rviz -->
+<!--   <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find turtlebot3_navigation)/rviz/turtlebot3_navigation.rviz"/>
+ -->
   <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find rrt_planner)/rviz/rrt_tb_2.rviz"/>
 </launch>
 

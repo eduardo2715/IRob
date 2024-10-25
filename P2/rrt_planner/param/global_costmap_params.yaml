@@ -6,4 +6,7 @@ global_costmap:
   publish_frequency: 10.0
   transform_tolerance: 0.5
 
-  static_map: false
+  static_map: true
+ 
+  #inflation_radius: 0.2
+  #cost_scaling_factor: 2.0
